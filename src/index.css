@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.loading span {
+    animation: dots 1.5s infinite ease-in-out;
+    font-size: 2rem;
+}
+
+.loading .dot1 {
+    animation-delay: 0s;
+}
+
+.loading .dot2 {
+    animation-delay: 0.3s;
+}
+
+.loading .dot3 {
+    animation-delay: 0.6s;
+}
+
+/* Keyframes for pulsing dots */
+@keyframes dots {
+    0%, 100% {
+        opacity: 1; /* Full visibility */
+    }
+    50% {
+        opacity: 0; /* Invisible in between */
+    }
+}

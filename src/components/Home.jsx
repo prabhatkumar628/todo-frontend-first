@@ -4,6 +4,7 @@ import { IoIosSend } from "react-icons/io";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import conf from "../conf/conf";
+import { Loading } from "./Loading";
 
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = conf.backendUrl
@@ -20,7 +21,7 @@ export const Home = () => {
         try {
             setLoading(true)
             const response = await axios.get("/api/todo/fetch", {
-                withCredentials:true,
+                withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -28,7 +29,7 @@ export const Home = () => {
             setTodos(response.data.data || [])
             setError(null)
         } catch (error) {
-            if(error.response?.data?.token !== true){
+            if (error.response?.data?.token !== true) {
                 navigate("/login")
             }
             setError("Failed to fetch todos")
@@ -83,14 +84,14 @@ export const Home = () => {
         }
     }
 
-    const logoutUser = async ()=>{
+    const logoutUser = async () => {
         try {
-           const {data} = await axios.get("/api/user/logout",{
-            withCredentials:true
-           })
-           console.log(data)
-           toast.success(data.success)
-           navigate("/login")
+            const { data } = await axios.get("/api/user/logout", {
+                withCredentials: true
+            })
+            console.log(data)
+            toast.success(data.success)
+            navigate("/login")
         } catch (error) {
             console.log(error.response.data)
             toast.error(error.response.data.success || error.response.data.message)
@@ -101,23 +102,22 @@ export const Home = () => {
         fetchTodos();
     }, [])
 
-    const remeningtodo = todos.filter((todo)=> todo.completed !== true)
+    const remeningtodo = todos.filter((todo) => todo.completed !== true)
 
-    if (loading) {
-        return <div>Loggind</div>
-    }
-  
     if (error) {
         return <div>{error}</div>
     }
 
     return (
         <>
-            <div className="w-full min-h-screen bg-white">
-                <div className="w-[50%] min-w-[300px] p-5 shadow-lg border rounded-lg bg-white m-auto mt-10">
+            <div className="w-full min-h-screen bg-white  px-4">
+                {loading &&
+                    <Loading />
+                }
+                <div className="sm:w-[50%] w-full p-5 shadow-lg border rounded-lg bg-white m-auto mt-10">
                     <h1 className="font-bold text-xl text-center py-2">Todo App</h1>
                     <div className="flex items-center  h-10">
-                        <form className="flex items-center w-full h-10" onSubmit={(e)=>{e.preventDefault(); createTodo()}}>
+                        <form className="flex items-center w-full h-10" onSubmit={(e) => { e.preventDefault(); createTodo() }}>
                             <input
                                 onChange={(e) => setNewTodo(e.target.value)}
                                 value={newTodo}

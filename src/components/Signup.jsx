@@ -3,6 +3,7 @@ import { useState } from "react"
 import toast from "react-hot-toast"
 import { Link, useNavigate } from "react-router-dom"
 import conf from "../conf/conf"
+import { Loading } from "./Loading"
 
 
 
@@ -11,10 +12,12 @@ export const Signup = () => {
     const [username, setUserName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const createUser = async (e) => {
         e.preventDefault()
         try {
+            setLoading(true)
             const response = await axios.post(`${conf.backendUrl}/api/user/signup`, {
                 username: username,
                 email: email,
@@ -33,10 +36,15 @@ export const Signup = () => {
             navgate("/login")
         } catch (error) {
             toast.error(error.response.data.message)
+        }finally{
+            setLoading(false)
         }
     }
     return (
-        <div className="w-full min-h-screen bg-white">
+        <div className="w-full min-h-screen bg-white px-4">
+            {loading &&
+                <Loading />
+            }
             <div className="w-[50%] max-w-[400px] min-w-[300px] p-5 shadow-lg border rounded-lg bg-white m-auto mt-10">
                 <h1 className="font-bold text-xl text-center py-2">Signup</h1>
                 <form onSubmit={(e) => createUser(e)}>
